@@ -1,0 +1,92 @@
+﻿#include<iostream>
+#include<string>
+#include<vector>
+#include<cstdlib>
+using namespace std;
+struct player
+{
+	string name;
+	int hp;
+	int attack;
+};
+
+struct enemy_mob
+{
+	int hp=50+rand()%21;
+	int attack=4+rand()%4;
+};
+
+void combat(int* hp,int*attack,int*target_hp, int* target_attack)
+{
+		int choice;
+		cout << "1.攻击" << endl;
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			*hp = *hp - *target_attack;
+			cout << "你的血量" << *hp<<endl;
+			*target_hp = *target_hp - *attack;
+			cout << "敌人血量" << * target_hp<<endl;
+		}
+		if (*hp <= 0)
+		{
+			*hp = 0;
+			cout << "你输了" << endl;
+		}
+		else if(*target_hp <= 0)
+		{ 
+			*target_hp = 0;
+			cout << "你赢了" << endl;
+		}
+}
+
+int main()
+{
+	player team[1];
+	cout << "输入你的名字" << endl;
+	cin >> team[0].name;
+	team[0].hp = 100;
+	team[0].attack = 10;
+	cout << "你的血量" << team[0].hp << '\t' << "你的攻击力" << team[0].attack<<endl;
+	int diffculty;
+	cout << "选择难度" << endl;
+	cout << "1.初级" << endl;
+    cout << "2.中级" << endl;
+	cout << "3.高级" << endl;
+	cin >> diffculty;
+	switch (diffculty)
+	{
+	case 1:
+	{
+		cout << "已选择初级" << endl;
+		int size = rand() % 3 + 1;
+		enemy_mob* group = new enemy_mob[size];//生成随机数量敌人
+		for (int i=0;i < size;i++)
+		{
+			cout << "血量" << group[i].hp << '\t' << "攻击力" << group[i].attack << endl;
+			while (team[0].hp > 0 || group[i].hp > 0)
+			{
+				combat(&team[0].hp, &team[0].attack, &group[i].hp, &group[i].attack);
+			}
+			
+		}
+		delete[]group;
+		break;
+	}
+	case 2:
+	{
+		cout << "已选择中级" << endl;
+		break;
+	}
+	case 3:
+	{
+		cout << "已选择高级" << endl;
+		break;
+	}
+	default:
+		cout << "前面的区域以后再来探索吧" << endl;
+
+	}
+	return 0;
+}

@@ -1,0 +1,161 @@
+﻿#include<iostream>
+#include<string>
+#include<vector>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+struct player//玩家
+{
+	string name;
+	int hp=0;
+	int attack=0;
+};
+
+struct enemy_mob//小怪
+{
+	int hp=50+rand()%21;
+	int attack=4+rand()%4;
+};
+
+struct enemy_boss//boss
+{
+	int hp = 100 + rand() % 51;
+	int attack = 10+ rand() % 10;
+};
+
+void combat(int* hp,int*attack,int*target_hp, int* target_attack)//战斗机制回合制
+{
+		int choice;
+		while (*hp > 0 && *target_hp > 0)
+		{
+			cout << "1.攻击" << endl;
+			cin >> choice;
+			switch (choice)
+			{
+			case 1:
+				*hp = *hp - *target_attack;
+				cout << "你的血量" << *hp << endl;
+				*target_hp = *target_hp - *attack;
+				cout << "敌人血量" << *target_hp << endl;
+			}
+			if (*hp <= 0)
+			{
+				*hp = 0;
+				cout << "你输了" << endl;
+			}
+			else if (*target_hp <= 0)
+			{
+				*target_hp = 0;
+				cout << "你赢了" << endl;
+			}
+		}
+}
+
+int main()
+{
+	srand(time(0));
+	player team[1];
+	cout << "输入你的名字" << endl;
+	cin >> team[0].name;
+	team[0].hp = 100;
+	team[0].attack = 10;//初始化主角
+	cout << "你的血量" << team[0].hp << '\t' << "你的攻击力" << team[0].attack<<endl;
+	bool running = true;
+	while (running)
+	{
+		int diffculty;
+		cout << "选择难度" << endl;
+		cout << "1.初级" << endl;
+		cout << "2.中级" << endl;
+		cout << "3.高级" << endl;
+		cin >> diffculty;
+		switch (diffculty)//(直接跳转)//选择难度
+		{
+		 case 1:
+		 {
+			cout << "已选择初级" << endl;
+			int size = rand() % diffculty + 1;
+			enemy_mob* group = new enemy_mob[size];//生成随机数量敌人
+			for (int i = 0;i < size;i++)
+			{
+				cout << "血量" << group[i].hp << '\t' << "攻击力" << group[i].attack << endl;
+				while (team[0].hp > 0 || group[i].hp > 0)
+				{
+					combat(&team[0].hp, &team[0].attack, &group[i].hp, &group[i].attack);
+				}
+
+			}
+			delete[]group;
+			break;
+		 }
+		 case 2:
+		 {
+			cout << "已选择中级" << endl;
+			int size = rand() % diffculty + 1;
+			enemy_mob* group = new enemy_mob[size];//生成随机数量敌人
+			int creation_pro = 10 * diffculty;
+			int rate = rand() % 100;
+			cout << "一共" << size << "个敌人" << endl;
+			for (int i = 0;i < size;i++)
+			{
+				cout << "血量" << group[i].hp << '\t' << "攻击力" << group[i].attack << endl;
+				combat(&team[0].hp, &team[0].attack, &group[i].hp, &group[i].attack);
+			}
+			if (rate < creation_pro)//遇到隐藏boss
+			{
+				enemy_boss b_group[1];
+				cout << "隐藏boss!" << endl;
+				cout << "血量" << b_group[0].hp << '\t' << "攻击力" << b_group[0].attack << endl;
+				combat(&team[0].hp, &team[0].attack, &b_group[0].hp, &b_group[0].attack);
+			}
+			delete[]group;
+			break;
+		 }
+		 case 3:
+		 {
+			cout << "已选择高级" << endl;
+			int size = rand() % diffculty + 1;
+			enemy_mob* group = new enemy_mob[size];//生成随机数量敌人
+			int creation_pro = 10 * diffculty;//概率遇到boss
+			int rate = rand() % 100;//生成概率
+			cout << "一共" << size << "个敌人" << endl;
+			for (int i = 0;i < size;i++)
+			{
+				cout << "血量" << group[i].hp << '\t' << "攻击力" << group[i].attack << endl;
+				combat(&team[0].hp, &team[0].attack, &group[i].hp, &group[i].attack);
+			}
+			if (rate < creation_pro)//遇到隐藏boss
+			{
+				enemy_boss b_group[1];
+				cout << "隐藏boss!" << endl;
+				cout << "血量" << b_group[0].hp << '\t' << "攻击力" << b_group[0].attack << endl;
+				combat(&team[0].hp, &team[0].attack, &b_group[0].hp, &b_group[0].attack);
+			}
+			delete[]group;
+			break;
+		 }
+		 default:
+		 {
+			cout << "前面的区域以后再来探索吧" << endl;
+		 }
+		}
+		cout << "exit game?" << endl;
+		cout << "1.yes" << '\t' << "2.no" << endl;
+		int choice;
+		cin >> choice;
+		switch (choice)
+		{
+		 case 1: 
+		 {
+			running = false;
+			break;
+		 }
+		 case 2:
+		 {
+			break;
+		 }
+		}
+	
+	cin.get();//跨平台可用=system("pause")
+	return 0;
+}

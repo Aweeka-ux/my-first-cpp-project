@@ -1,0 +1,65 @@
+﻿#include<iostream>
+#include<string>
+#include<vector>
+#include<cstdlib>
+using namespace std;
+struct player
+{
+	string name;
+	int hp;
+	int attack;
+};
+
+struct enemy
+{
+	int hp;
+	int attack;
+};
+
+void combat(int* hp,int*attack)
+{
+	int choice;
+	cout << "1.攻击" << endl;
+	cin >> choice;
+	switch (choice)
+	{
+	case 1:
+		*hp = *hp - *attack;
+	}
+	if (*hp <= 0)
+	{
+		*hp = 0;
+	}
+}
+
+int main()
+{
+	player team[1];
+	cout << "输入你的名字" << endl;
+	cin >> team[0].name;
+	team[0].hp = 100;
+	team[0].attack = 10;
+	int diffculty;
+	cout << "选择难度" << endl;
+	cout << "1.初级" << endl;
+    cout << "2.中级" << endl;
+	cout << "3.高级" << endl;
+	cin >> diffculty;
+	switch (diffculty)
+	{ 
+	case 1:
+		cout << "已选择初级" << endl;
+		enemy group = { 50 + rand() % 31, 3 + rand() % 3 };
+		break;
+	case 2:
+		cout << "已选择中级" << endl;
+		break;
+	case 3:
+		cout << "已选择高级" << endl;
+		break;
+	default:
+		cout << "前面的区域以后再来探索吧" << endl;
+
+	}
+
+}
